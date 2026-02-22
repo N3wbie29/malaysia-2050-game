@@ -28,6 +28,9 @@ body {
   background-repeat: no-repeat,no-repeat;
 } */
 
+#tower {
+  width: 200px;
+}
 
 button {
   padding: 10px;
@@ -44,3 +47,4 @@ button:hover {
   background: #ff6b6b;
   transform: scale(1.05);
 }
+
