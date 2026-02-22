@@ -29,7 +29,10 @@ body {
 } */
 
 #tower {
-  width: 150px ;
+  width: 150px;
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
 }
 
 button {
@@ -47,6 +50,7 @@ button:hover {
   background: #ff6b6b;
   transform: scale(1.05);
 }
+
 
 
 
