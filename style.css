@@ -4,6 +4,8 @@ body {
   background: #0d1b2a;
   color: white;
 
+  position:relative;
+
   margin: 0;
   min-height: 100vh;
 
@@ -28,11 +30,75 @@ body {
   background-repeat: no-repeat,no-repeat;
 } */
 
-#tower {
-  width: 300px;
+#rc {  /*researchcenter*/
+  width: 500px;
   position: absolute;
-  bottom: 100px;
-  left: 400px;
+  bottom: 150px;
+  left: 50px;
+}
+
+#cpy {  /*company*/
+  width: 500px;
+  position: absolute;
+  bottom: 192px;
+  right: 40px;
+}
+
+.flat {  /*flat*/
+  position: absolute;
+}
+
+.small {  /*small flat*/
+  width: 500px;
+}
+
+.right-small { /*small flat position*/
+  right: 313px;
+  bottom: 193px;
+}
+
+.big {  /*big flat*/
+  width: 600px;
+  bottom: 179px;
+}
+
+.left-big { /*big left flat position*/
+  left: 180px;
+}
+
+.right-big { /*big right flat position*/
+  right: 150px;
+}
+
+.tree {
+  position: absolute;
+}
+
+.small-tree {  /*small tree*/
+  width: 280px;
+  bottom: 206px;
+  left: 450px;
+}
+
+.medium-tree {  /*medum tree*/
+  width: 400px;
+  bottom: 188px;
+  left: 215px;
+}
+
+.big-tree {  /*big tree*/
+  width: 450px;
+  bottom: 181px;
+  right: 420px;
+}
+
+
+
+#hpt {  /*hospital*/
+  width: 680px;
+  position: absolute;
+  bottom: 125px;
+  left: 350px;
 }
 
 button {
@@ -50,7 +116,6 @@ button:hover {
   background: #ff6b6b;
   transform: scale(1.05);
 }
-
 
 
 
