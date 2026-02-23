@@ -10,7 +10,7 @@ body {
   min-height: 100vh;
 
   background-image: 
-    url("screen.png"),   
+    url("background.png"),   
     linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
     url("background.png");
 
