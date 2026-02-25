@@ -19,17 +19,6 @@ body {
   background-repeat: no-repeat, no-repeat;
 }
 
-/* 
-body {
-  background-image: 
-    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-    url("background.png");
-
-  background-size: cover,76%;
-  background-position: center,center top;
-  background-repeat: no-repeat,no-repeat;
-} */
-
 #rc {  /*researchcenter*/
   width: 500px;
   position: absolute;
@@ -92,8 +81,6 @@ body {
   right: 420px;
 }
 
-
-
 #hpt {  /*hospital*/
   width: 680px;
   position: absolute;
@@ -117,7 +104,32 @@ button:hover {
   transform: scale(1.05);
 }
 
+#restartBtn {
+  background: #28a745;
+  color: white;
+  border: none;
+}
 
+/* Prevent images from blocking button clicks */
+img {
+  pointer-events: none;
+}
 
+/* Count badges (x2, x3...) shown on buildings */
+.badge {
+  position: absolute;
+  background: #ff6b6b;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 50;
+}
 
-
+#badge-rc   { bottom: 280px; left: 70px; }
+#badge-cpy  { bottom: 310px; right: 60px; }
+#badge-hpt  { bottom: 250px; left: 530px; }
+#badge-flat { bottom: 310px; right: 330px; }
+#badge-tree { bottom: 320px; left: 460px; }
