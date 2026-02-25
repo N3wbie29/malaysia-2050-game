@@ -8,15 +8,22 @@
 
 <h1>Malaysia 2050 – Smart City</h1>
 
- <img id="rc" src="researchCenter.png" >
- <img id="cpy" src="company.png" >
- <img id="hpt" src="hospital.png" >
- <img src="flat.png" class="flat small right-small">
- <img src="flat.png" class="flat big left-big">
- <img src="flat.png" class="flat big right-big"> 
- <img src="tree.png" class="tree small-tree">
- <img src="tree.png" class="tree medium-tree">
- <img src="tree.png" class="tree big-tree"> 
+ <img id="rc"  src="researchCenter.png" style="display:none;">
+ <img id="cpy" src="company.png"        style="display:none;">
+ <img id="hpt" src="hospital.png"       style="display:none;">
+ <img id="flat1" src="flat.png" class="flat small right-small" style="display:none;">
+ <img id="flat2" src="flat.png" class="flat big left-big"      style="display:none;">
+ <img id="flat3" src="flat.png" class="flat big right-big"     style="display:none;">
+ <img id="tree1" src="tree.png" class="tree small-tree"        style="display:none;">
+ <img id="tree2" src="tree.png" class="tree medium-tree"       style="display:none;">
+ <img id="tree3" src="tree.png" class="tree big-tree"          style="display:none;">
+
+
+<span class="badge" id="badge-rc"   style="display:none;"></span>
+<span class="badge" id="badge-cpy"  style="display:none;"></span>
+<span class="badge" id="badge-hpt"  style="display:none;"></span>
+<span class="badge" id="badge-flat" style="display:none;"></span>
+<span class="badge" id="badge-tree" style="display:none;"></span>
 
 <div class="stats">
   Happiness: <span id="happy">50</span><br>
@@ -31,8 +38,11 @@
 <button onclick="buildHospital()">🏥 Hospital</button>
 <button onclick="buildCampus()">🎓 Campus</button>
 <button onclick="buildPark()">🌳 Park</button>
+<button onclick="nextMonth()">⏭️ Next Month</button>
+<button id="restartBtn" onclick="restartGame()" style="display:none;">🔄 Restart</button>
 
 <p id="message"></p>
+<p id="turnInfo">📅 Month: <span id="month">1</span> / 12 &nbsp;|&nbsp; 🎯 Decisions left: <span id="decisions">3</span></p>
 
 <script src="game.js"></script>
 </body>
