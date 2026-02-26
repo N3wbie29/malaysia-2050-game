@@ -7,7 +7,9 @@ let currentMonth = 1;
 let decisionsLeft = 3;
 let gameOver = false;
 
+
 const buildCount = { campus: 0, hospital: 0, transport: 0, park: 0 };
+
 
 function showAndCount(imgId, badgeId, count) {
   const img = document.getElementById(imgId);
@@ -56,7 +58,7 @@ function getTitle() {
     case "happiness": return "Symphony of Joy";
     case "health":    return "Symphony of Vitality";
     case "economy":   return "Symphony of Wealth";
-    case "green":     return "Symphony of Nature";
+    case "green":     return "Symphony of Eternity";
     default:          return "Symphony of Harmony";
   }
 }
@@ -89,19 +91,33 @@ function spendDecision() {
   decisionsLeft--;
   document.getElementById("decisions").innerText = decisionsLeft;
   if (decisionsLeft === 0) {
-    setTimeout(() => nextMonth(), 800); // short delay so player sees the last action
+    setTimeout(() => nextMonth(), 800); 
   }
   return true;
 }
 
 function nextMonth() {
   if (gameOver) return;
-  currentMonth++;
-  decisionsLeft = 3;
+
+  
   happiness = Math.max(0, happiness - 3);
   health    = Math.max(0, health    - 2);
   economy   = Math.max(0, economy   - 2);
   green     = Math.max(0, green     - 3);
+
+  
+  if (currentMonth >= 12) {
+    gameOver = true;
+    const title = getTitle();
+    document.getElementById("message").innerText = `🎉 Year complete! You earned the title: "${title}"`;
+    document.getElementById("restartBtn").style.display = "inline";
+    document.querySelectorAll("button:not(#restartBtn)").forEach(btn => btn.disabled = true);
+    updateUI();
+    return;
+  }
+
+  currentMonth++;
+  decisionsLeft = 3;
   document.getElementById("message").innerText = `📅 Month ${currentMonth} begins. You have 3 decisions.`;
   updateUI();
 }
@@ -123,8 +139,9 @@ function restartGame() {
 
 function buildTransport() {
   if (!spendDecision()) return;
-  happiness += 10;
-  economy += 5;
+  happiness += 5;
+  economy += 10;
+  green -+ 10;
   buildCount.transport++;
   showAndCount("flat1", "badge-flat", buildCount.transport);
   showAndCount("flat2", "badge-flat", buildCount.transport);
@@ -137,6 +154,7 @@ function buildHospital() {
   if (!spendDecision()) return;
   health += 15;
   economy -= 5;
+  green -= 5;
   buildCount.hospital++;
   showAndCount("hpt", "badge-hpt", buildCount.hospital);
   document.getElementById("message").innerText = "Hospital built!";
@@ -147,19 +165,21 @@ function buildCampus() {
   if (!spendDecision()) return;
   happiness += 5;
   economy += 5;
+  green -= 10;
   buildCount.campus++;
   showAndCount("rc", "badge-rc", buildCount.campus);
   document.getElementById("message").innerText = "Campus opened!";
   updateUI();
 }
 
-function buildPark() {
+function buildSustainability() {
   if (!spendDecision()) return;
   green += 15;
+  happiness += 10;
   buildCount.park++;
   showAndCount("tree1", "badge-tree", buildCount.park);
   showAndCount("tree2", "badge-tree", buildCount.park);
   showAndCount("tree3", "badge-tree", buildCount.park);
-  document.getElementById("message").innerText = "Eco park created!";
+  document.getElementById("message").innerText = "Sustainability project launched!";
   updateUI();
 }
