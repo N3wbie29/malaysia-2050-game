@@ -4,7 +4,7 @@ body {
   background: #0d1b2a;
   color: white;
 
-  position:relative;
+  position: relative;
 
   margin: 0;
   min-height: 100vh;
@@ -14,8 +14,8 @@ body {
     linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
     url("background.png");
 
-  background-size: 77%,cover, cover;
-  background-position: center top,center, 40%;
+  background-size: 77%, cover, cover;
+  background-position: center top, center, 40%;
   background-repeat: no-repeat, no-repeat;
 }
 
@@ -69,7 +69,7 @@ body {
   left: 450px;
 }
 
-.medium-tree {  /*medum tree*/
+.medium-tree {  /*medium tree*/
   width: 400px;
   bottom: 188px;
   left: 215px;
@@ -88,11 +88,20 @@ body {
   left: 350px;
 }
 
+/* ── UI elements always on top of buildings ── */
+h1, .stats, hr, #message, #turnInfo {
+  position: relative;
+  z-index: 100;
+}
+
 button {
   padding: 10px;
   margin: 5px;
   font-size: 16px;
   cursor: pointer;
+  position: relative;
+  z-index: 100;
+  margin-top: -40px;
 }
 
 .stats {
@@ -110,12 +119,12 @@ button:hover {
   border: none;
 }
 
-/* Prevent images from blocking button clicks */
+
 img {
   pointer-events: none;
 }
 
-/* Count badges (x2, x3...) shown on buildings */
+
 .badge {
   position: absolute;
   background: #ff6b6b;
