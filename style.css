@@ -3,134 +3,217 @@ body {
   text-align: center;
   background: #0d1b2a;
   color: white;
-
   position: relative;
-
   margin: 0;
   min-height: 100vh;
-
-  background-image: 
-    url("background.png"),   
-    linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-    url("background.png");
-
-  background-size: 77%, cover, cover;
-  background-position: center top, center, 40%;
-  background-repeat: no-repeat, no-repeat;
+  width: 100%;
+  overflow-x: hidden;
+  background-image: url("background.png");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
 
-#rc {  /*researchcenter*/
-  width: 500px;
+#endScreen {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+#endBox {
+  background: #1a2a3a;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 16px;
+  padding: 40px 60px;
+  text-align: center;
+}
+
+#endTitle {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+#endMsg {
+  font-size: 18px;
+  margin-bottom: 24px;
+  color: #aad4f5;
+}
+
+#endBox button {
+  background: #28a745;
+  font-size: 16px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.stats-panel {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 12px;
+  padding: 10px 14px;
+  width: 240px;
+}
+
+h1 {
+  font-size: 13px;
+  margin: 0 0 8px;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.btn-panel {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  text-align: center;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  margin: 5px auto;
+  gap: 8px;
+}
+
+.stat-label {
+  width: 110px;
+  text-align: right;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.bar-bg {
+  flex: 1;
+  height: 14px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #2ecc71;
+  border-radius: 8px;
+  width: 50%;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.stat-num {
+  width: 28px;
+  text-align: left;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.month-fill {
+  background: #3498db !important;
+  width: 8%;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: #1a73e8;
+  color: white;
+  font-weight: bold;
+  transition: background 0.2s, transform 0.1s;
+}
+
+button:hover:not(:disabled) {
+  background: #ff6b6b;
+  transform: scale(1.05);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#message {
+  font-size: 13px;
+  margin: 6px 0 2px;
+  min-height: 18px;
+  color: #aad4f5;
+}
+
+#turnInfo {
+  font-size: 13px;
+  margin: 2px 0 0;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+#rc, #cpy, #hpt, .flat, .tree {
   position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 1;
+}
+
+#rc {
+  width: 500px;
   bottom: 150px;
   left: 50px;
 }
 
-#cpy {  /*company*/
+#cpy {
   width: 500px;
-  position: absolute;
   bottom: 192px;
   right: 40px;
 }
 
-.flat {  /*flat*/
-  position: absolute;
-}
+.flat { position: absolute; }
+.small { width: 500px; }
+.right-small { right: 313px; bottom: 193px; }
+.big { width: 600px; bottom: 179px; }
+.left-big { left: 180px; }
+.right-big { right: 150px; }
 
-.small {  /*small flat*/
-  width: 500px;
-}
+.tree { position: absolute; }
+.small-tree  { width: 280px; bottom: 206px; left: 450px; }
+.medium-tree { width: 400px; bottom: 188px; left: 215px; }
+.big-tree    { width: 450px; bottom: 181px; right: 420px; }
 
-.right-small { /*small flat position*/
-  right: 313px;
-  bottom: 193px;
-}
-
-.big {  /*big flat*/
-  width: 600px;
-  bottom: 179px;
-}
-
-.left-big { /*big left flat position*/
-  left: 180px;
-}
-
-.right-big { /*big right flat position*/
-  right: 150px;
-}
-
-.tree {
-  position: absolute;
-}
-
-.small-tree {  /*small tree*/
-  width: 280px;
-  bottom: 206px;
-  left: 450px;
-}
-
-.medium-tree {  /*medium tree*/
-  width: 400px;
-  bottom: 188px;
-  left: 215px;
-}
-
-.big-tree {  /*big tree*/
-  width: 450px;
-  bottom: 181px;
-  right: 420px;
-}
-
-#hpt {  /*hospital*/
+#hpt {
   width: 680px;
   position: absolute;
   bottom: 125px;
   left: 350px;
 }
 
-/* ── UI elements always on top of buildings ── */
-h1, .stats, hr, #message, #turnInfo {
-  position: relative;
-  z-index: 100;
-}
-
-button {
-  padding: 10px;
-  margin: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  position: relative;
-  z-index: 100;
-  margin-top: -40px;
-}
-
-.stats {
-  margin: 20px;
-}
-
-button:hover {
-  background: #ff6b6b;
-  transform: scale(1.05);
-}
-
-#restartBtn {
-  background: #28a745;
-  color: white;
-  border: none;
-}
-
-
-img {
-  pointer-events: none;
-}
-
+img { pointer-events: none; }
 
 .badge {
   position: absolute;
   background: #ff6b6b;
   color: white;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   padding: 3px 8px;
   border-radius: 12px;
   pointer-events: none;
