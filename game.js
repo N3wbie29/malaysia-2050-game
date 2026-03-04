@@ -7,36 +7,10 @@ let currentMonth = 1;
 let decisionsLeft = 3;
 let gameOver = false;
 
-
-const buildCount = { campus: 0, hospital: 0, transport: 0, park: 0 };
-
-
-function showAndCount(imgId, badgeId, count) {
-  const img = document.getElementById(imgId);
-  const badge = document.getElementById(badgeId);
-  if (img) img.style.display = "block";
-  if (badge) {
-    if (count > 1) {
-      badge.innerText = "x" + count;
-      badge.style.display = "block";
-    }
-  }
-}
-
-function hideAllBuildings() {
-  ["rc","cpy","hpt","flat1","flat2","flat3","tree1","tree2","tree3"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
-  ["badge-rc","badge-cpy","badge-hpt","badge-flat","badge-tree"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.style.display = "none"; el.innerText = ""; }
-  });
-  buildCount.campus = 0;
-  buildCount.hospital = 0;
-  buildCount.transport = 0;
-  buildCount.park = 0;
-}
+let countCampus = 0;
+let countHospital = 0;
+let countTransport = 0;
+let countSustain = 0;
 
 function updateUI() {
   document.getElementById("happy").innerText = happiness;
@@ -45,21 +19,84 @@ function updateUI() {
   document.getElementById("green").innerText = green;
   document.getElementById("month").innerText = currentMonth;
   document.getElementById("decisions").innerText = decisionsLeft;
+
+  document.getElementById("bar-happy").style.width = happiness + "%";
+  document.getElementById("bar-health").style.width = health + "%";
+  document.getElementById("bar-eco").style.width = economy + "%";
+  document.getElementById("bar-green").style.width = green + "%";
+  document.getElementById("bar-month").style.width = (currentMonth / 12 * 100) + "%";
+
+  updateBarColor("bar-happy", happiness);
+  updateBarColor("bar-health", health);
+  updateBarColor("bar-eco", economy);
+  updateBarColor("bar-green", green);
+
   checkWinLose();
 }
 
+function updateBarColor(barId, value) {
+  var bar = document.getElementById(barId);
+  if (value < 20) {
+    bar.style.background = "#e74c3c";
+  } else if (value < 40) {
+    bar.style.background = "#f39c12";
+  } else {
+    bar.style.background = "#2ecc71";
+  }
+}
+
+function showBuilding(id) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.style.display = "block";
+    el.style.opacity = "0";
+    setTimeout(function() { el.style.opacity = "1"; }, 10);
+  }
+}
+
+function showAndCount(imgId, badgeId, count) {
+  showBuilding(imgId);
+  var badge = document.getElementById(badgeId);
+  if (badge && count > 1) {
+    badge.innerText = "x" + count;
+    badge.style.display = "block";
+  }
+}
+
+function hideAllBuildings() {
+  var ids = ["rc","cpy","hpt","flat1","flat2","flat3","tree1","tree2","tree3"];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el) el.style.display = "none";
+  }
+  var badges = ["badge-rc","badge-cpy","badge-hpt","badge-flat","badge-tree"];
+  for (var i = 0; i < badges.length; i++) {
+    var el = document.getElementById(badges[i]);
+    if (el) { el.style.display = "none"; el.innerText = ""; }
+  }
+}
+
 function getTitle() {
-  const stats = { happiness, health, economy, green };
-  const max = Math.max(...Object.values(stats));
-  const min = Math.min(...Object.values(stats));
+  var max = Math.max(happiness, health, economy, green);
+  var min = Math.min(happiness, health, economy, green);
+
   if (max - min <= 15) return "Symphony of Harmony";
-  const dominant = Object.keys(stats).find(k => stats[k] === max);
-  switch (dominant) {
-    case "happiness": return "Symphony of Joy";
-    case "health":    return "Symphony of Vitality";
-    case "economy":   return "Symphony of Wealth";
-    case "green":     return "Symphony of Eternity";
-    default:          return "Symphony of Harmony";
+  if (happiness == max) return "Symphony of Joy";
+  if (health == max)    return "Symphony of Vitality";
+  if (economy == max)   return "Symphony of Wealth";
+  if (green == max)     return "Symphony of Eternity";
+
+  return "Symphony of Harmony";
+}
+
+function showEndScreen(title, msg) {
+  document.getElementById("endTitle").innerText = title;
+  document.getElementById("endMsg").innerText = msg;
+  document.getElementById("endScreen").style.display = "flex";
+
+  var buttons = document.querySelectorAll(".btn-row button");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = true;
   }
 }
 
@@ -68,19 +105,12 @@ function checkWinLose() {
 
   if (happiness <= 0 || health <= 0 || economy <= 0 || green <= 0) {
     gameOver = true;
-    const stat = happiness <= 0 ? "Happiness" : health <= 0 ? "Health" : economy <= 0 ? "Economy" : "Environment";
-    document.getElementById("message").innerText = `💀 GAME OVER! ${stat} collapsed after ${currentMonth} month(s).`;
-    document.getElementById("restartBtn").style.display = "inline";
-    document.querySelectorAll("button:not(#restartBtn)").forEach(btn => btn.disabled = true);
-    return;
-  }
-
-  if (currentMonth > 12) {
-    gameOver = true;
-    const title = getTitle();
-    document.getElementById("message").innerText = `🎉 Year complete! You earned the title: "${title}"`;
-    document.getElementById("restartBtn").style.display = "inline";
-    document.querySelectorAll("button:not(#restartBtn)").forEach(btn => btn.disabled = true);
+    var stat = "a stat";
+    if (happiness <= 0) stat = "Happiness";
+    if (health <= 0)    stat = "Health";
+    if (economy <= 0)   stat = "Economy";
+    if (green <= 0)     stat = "Environment";
+    showEndScreen("💀 City Collapsed!", stat + " hit zero after " + currentMonth + " month(s).");
     return;
   }
 }
@@ -88,98 +118,112 @@ function checkWinLose() {
 function spendDecision() {
   if (gameOver) return false;
   if (decisionsLeft <= 0) return false;
+
   decisionsLeft--;
   document.getElementById("decisions").innerText = decisionsLeft;
+
   if (decisionsLeft === 0) {
-    setTimeout(() => nextMonth(), 800); 
+    setTimeout(function() { nextMonth(); }, 800);
   }
+
   return true;
 }
 
 function nextMonth() {
   if (gameOver) return;
 
-  
-  happiness = Math.max(0, happiness - 3);
+  happiness = Math.max(0, happiness - 2);
   health    = Math.max(0, health    - 2);
   economy   = Math.max(0, economy   - 2);
-  green     = Math.max(0, green     - 3);
+  green     = Math.max(0, green     - 2);
 
-  
   if (currentMonth >= 12) {
     gameOver = true;
-    const title = getTitle();
-    document.getElementById("message").innerText = `🎉 Year complete! You earned the title: "${title}"`;
-    document.getElementById("restartBtn").style.display = "inline";
-    document.querySelectorAll("button:not(#restartBtn)").forEach(btn => btn.disabled = true);
+    var title = getTitle();
     updateUI();
+    showEndScreen("🎉 Year Complete!", 'You earned the title: "' + title + '"');
     return;
   }
 
   currentMonth++;
   decisionsLeft = 3;
-  document.getElementById("message").innerText = `📅 Month ${currentMonth} begins. You have 3 decisions.`;
+  document.getElementById("message").innerText = "📅 Month " + currentMonth + " begins!";
   updateUI();
 }
 
 function restartGame() {
   happiness = 50;
-  health = 50;
-  economy = 50;
-  green = 50;
-  currentMonth = 1;
+  health    = 50;
+  economy   = 50;
+  green     = 50;
+  currentMonth  = 1;
   decisionsLeft = 3;
-  gameOver = false;
+  gameOver      = false;
+  countCampus   = 0;
+  countHospital = 0;
+  countTransport = 0;
+  countSustain  = 0;
+
   hideAllBuildings();
+  document.getElementById("endScreen").style.display = "none";
   document.getElementById("message").innerText = "🔄 Game restarted! Good luck.";
-  document.getElementById("restartBtn").style.display = "none";
-  document.querySelectorAll("button").forEach(btn => btn.disabled = false);
+
+  var buttons = document.querySelectorAll(".btn-row button");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].disabled = false;
+  }
+
   updateUI();
 }
 
 function buildTransport() {
   if (!spendDecision()) return;
-  happiness += 5;
-  economy += 10;
-  green -+ 10;
-  buildCount.transport++;
-  showAndCount("flat1", "badge-flat", buildCount.transport);
-  showAndCount("flat2", "badge-flat", buildCount.transport);
-  showAndCount("flat3", "badge-flat", buildCount.transport);
-  document.getElementById("message").innerText = "Transport improved!";
+  happiness += 8;
+  economy   += 6;
+  health    += 2;
+  green     -= 3;
+  countTransport++;
+  showAndCount("flat1", "badge-flat", countTransport);
+  showAndCount("flat2", "badge-flat", countTransport);
+  showAndCount("flat3", "badge-flat", countTransport);
+  document.getElementById("message").innerText = "🚆 Transport improved!";
   updateUI();
 }
 
 function buildHospital() {
   if (!spendDecision()) return;
-  health += 15;
-  economy -= 5;
-  green -= 5;
-  buildCount.hospital++;
-  showAndCount("hpt", "badge-hpt", buildCount.hospital);
-  document.getElementById("message").innerText = "Hospital built!";
+  health    += 12;
+  happiness += 4;
+  economy   -= 4;
+  green     += 2;
+  countHospital++;
+  showAndCount("hpt", "badge-hpt", countHospital);
+  document.getElementById("message").innerText = "🏥 Hospital built!";
   updateUI();
 }
 
 function buildCampus() {
   if (!spendDecision()) return;
-  happiness += 5;
-  economy += 5;
-  green -= 10;
-  buildCount.campus++;
-  showAndCount("rc", "badge-rc", buildCount.campus);
-  document.getElementById("message").innerText = "Campus opened!";
+  happiness += 6;
+  economy   += 8;
+  health    += 2;
+  green     -= 2;
+  countCampus++;
+  showAndCount("rc", "badge-rc", countCampus);
+  document.getElementById("message").innerText = "🎓 Campus opened!";
   updateUI();
 }
 
 function buildSustainability() {
   if (!spendDecision()) return;
-  green += 15;
-  happiness += 10;
-  buildCount.park++;
-  showAndCount("tree1", "badge-tree", buildCount.park);
-  showAndCount("tree2", "badge-tree", buildCount.park);
-  showAndCount("tree3", "badge-tree", buildCount.park);
-  document.getElementById("message").innerText = "Sustainability project launched!";
+  green     += 12;
+  health    += 4;
+  happiness += 3;
+  economy   -= 3;
+  countSustain++;
+  showAndCount("tree1", "badge-tree", countSustain);
+  showAndCount("tree2", "badge-tree", countSustain);
+  showAndCount("tree3", "badge-tree", countSustain);
+  document.getElementById("message").innerText = "♻️ Sustainability project launched!";
   updateUI();
 }
