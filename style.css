@@ -220,8 +220,8 @@ img { pointer-events: none; }
   z-index: 50;
 }
 
-#badge-rc   { bottom: 280px; left: 70px; }
-#badge-cpy  { bottom: 310px; right: 60px; }
-#badge-hpt  { bottom: 250px; left: 530px; }
-#badge-flat { bottom: 310px; right: 330px; }
-#badge-tree { bottom: 320px; left: 460px; }
+#badge-rc   { bottom: 148px; left: 270px; }
+#badge-cpy  { bottom: 190px; right: 280px; }
+#badge-hpt  { bottom: 200px; left: 675px; }
+#badge-flat { bottom: 191px; right: 400px; }
+#badge-tree { bottom: 204px; left: 430px; }
