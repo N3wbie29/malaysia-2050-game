@@ -181,7 +181,7 @@ function buildTransport() {
   happiness += 8;
   economy   += 6;
   health    += 2;
-  green     -= 3;
+  green     -= 5;
   countTransport++;
   showAndCount("flat1", "badge-flat", countTransport);
   showAndCount("flat2", "badge-flat", countTransport);
@@ -207,7 +207,7 @@ function buildCampus() {
   happiness += 6;
   economy   += 8;
   health    += 2;
-  green     -= 2;
+  green     -= 5;
   countCampus++;
   showAndCount("rc", "badge-rc", countCampus);
   document.getElementById("message").innerText = "🎓 Campus opened!";
@@ -219,11 +219,11 @@ function buildSustainability() {
   green     += 12;
   health    += 4;
   happiness += 3;
-  economy   -= 3;
+  economy   -= 5;
   countSustain++;
   showAndCount("tree1", "badge-tree", countSustain);
   showAndCount("tree2", "badge-tree", countSustain);
   showAndCount("tree3", "badge-tree", countSustain);
-  document.getElementById("message").innerText = "♻️ Sustainability project launched!";
+  document.getElementById("message").innerText = "🌳 Trees planted!";
   updateUI();
 }
