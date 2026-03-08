@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Malaysia 2050</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- <h1>Malaysia 2050 – Smart City</h1> -->
+
+<!-- <div id="popup" class="popup">
+  <h2>City Information</h2>
+  <p>This is your smart city control panel.</p>
+  <button onclick="buildFlat()">🏢 Flat</button>
+  <button onclick="buildHospital()">🏥 Hospital</button>
+  <button onclick="buildResearchCenter()">🔬 ResearchCenter</button>
+  <button onclick="buildTree()">🌲 Tree</button>
+  <button onclick="buildCompany()">🏣 Company</button>
+  <button onclick="nextMonth()">⏩ Skip Month</button>
+
+</div> -->
 
 <div id="endScreen">
   <div id="endBox">
@@ -14,21 +30,18 @@
   </div>
 </div>
 
-<img id="rc"    src="researchCenter.png" style="display:none;">
-<img id="cpy"   src="company.png"        style="display:none;">
-<img id="hpt"   src="hospital.png"       style="display:none;">
-<img id="flat1" src="flat.png" class="flat small right-small" style="display:none;">
-<img id="flat2" src="flat.png" class="flat big left-big"      style="display:none;">
-<img id="flat3" src="flat.png" class="flat big right-big"     style="display:none;">
-<img id="tree1" src="tree.png" class="tree small-tree"        style="display:none;">
-<img id="tree2" src="tree.png" class="tree medium-tree"       style="display:none;">
-<img id="tree3" src="tree.png" class="tree big-tree"          style="display:none;">
 
-<span class="badge" id="badge-rc"   style="display:none;"></span>
-<span class="badge" id="badge-cpy"  style="display:none;"></span>
-<span class="badge" id="badge-hpt"  style="display:none;"></span>
-<span class="badge" id="badge-flat" style="display:none;"></span>
-<span class="badge" id="badge-tree" style="display:none;"></span>
+<div class="game-container">
+ <img id="rc"  src="researchCenter.png" style="display:none;">
+ <img id="cpy" src="company.png"        style="display:none;">
+ <img id="hpt" src="hospital.png"       style="display:none;">
+ <img id="flat1" src="flat.png" class="flat small right-small" style="display:none;">
+ <img id="flat2" src="flat.png" class="flat big left-big"      style="display:none;">
+ <img id="flat3" src="flat.png" class="flat big right-big"     style="display:none;">
+ <img id="tree1" src="tree.png" class="tree small-tree"        style="display:none;">
+ <img id="tree2" src="tree.png" class="tree medium-tree"       style="display:none;">
+ <img id="tree3" src="tree.png" class="tree big-tree"          style="display:none;">
+</div>
 
 <div class="stats-panel">
   <h1>🏙️ Malaysia 2050</h1>
@@ -37,7 +50,7 @@
     <div class="bar-bg"><div class="bar-fill" id="bar-happy"></div></div>
     <span class="stat-num" id="happy">50</span>
   </div>
-  <div class="stat-row">
+   <div class="stat-row">
     <span class="stat-label">❤️ Health</span>
     <div class="bar-bg"><div class="bar-fill" id="bar-health"></div></div>
     <span class="stat-num" id="health">50</span>
@@ -48,9 +61,14 @@
     <span class="stat-num" id="eco">50</span>
   </div>
   <div class="stat-row">
-    <span class="stat-label">♻️ Sustainability</span>
-    <div class="bar-bg"><div class="bar-fill" id="bar-green"></div></div>
-    <span class="stat-num" id="green">50</span>
+    <span class="stat-label">🌿 Sustainability</span>
+    <div class="bar-bg"><div class="bar-fill" id="bar-sus"></div></div>
+    <span class="stat-num" id="stn">50</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label">👥 Population</span>
+    <div class="bar-bg"><div class="bar-fill pop-fill" id="bar-pop"></div></div>
+    <span class="stat-num" id="pop">0</span>
   </div>
   <div class="stat-row">
     <span class="stat-label">📅 Month <span id="month">1</span>/12</span>
@@ -58,16 +76,33 @@
   </div>
 </div>
 
+<div class="count-panel">
+  <h1>🏙️ Building Count</h1>
+ <div class="count-content">
+  Flat: <span id="CountFlat">0</span><br>
+  Hospital: <span id="CountHospital">0</span><br>
+  Tree: <span id="CountTree">0</span><br>
+  Company: <span id="CountCompany">0</span><br>
+  Research Center: <span id="CountResearchCenter">0</span><br>
+  </div>
+</div>
+
 <div class="btn-panel">
   <div class="btn-row">
-    <button onclick="buildTransport()">🚆 Transport</button>
+    <button onclick="buildTree()">🌲 Tree</button>
     <button onclick="buildHospital()">🏥 Hospital</button>
-    <button onclick="buildCampus()">🎓 Campus</button>
-    <button onclick="buildSustainability()">🌳 Trees</button>
+    <button onclick="buildCompany()">🏣 Company</button>
+    <button onclick="buildFlat()">🏢 Flat</button>
+    <button id="rcBtn" onclick="buildResearchCenter()">🔬 Research Center</button>
   </div>
   <p id="message"></p>
   <p id="turnInfo">🎯 Decisions left: <span id="decisions">3</span></p>
 </div>
+
+<div id="popup" class="popup">
+  <h2>City Information</h2>
+  <button onclick="buildFlat()">🏢 Flat</button>
+  </div>
 
 <script src="game.js"></script>
 </body>
