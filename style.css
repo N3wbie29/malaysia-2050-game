@@ -10,8 +10,23 @@ body {
   overflow-x: hidden;
   background-image: url("background.png");
   background-size: cover;
-  background-position: center bottom;
+  background-position: center;
   background-repeat: no-repeat;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
 }
 
 #endScreen {
@@ -38,12 +53,6 @@ body {
   margin-bottom: 10px;
 }
 
-#endMsg {
-  font-size: 18px;
-  margin-bottom: 24px;
-  color: #aad4f5;
-}
-
 #endBox button {
   background: #28a745;
   font-size: 16px;
@@ -52,6 +61,26 @@ body {
   border-radius: 8px;
   color: white;
   cursor: pointer;
+}
+
+.count-panel {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 12px;
+  padding: 10px 14px;
+  width: 240px;
+  line-height: 1.6;
+}
+
+.count-content{
+  text-align: left;
+  font-size: 13px;
+  flex-shrink: 0;
+  gap: 8px;
+  margin: 5px auto;
 }
 
 .stats-panel {
@@ -72,14 +101,6 @@ h1 {
   text-align: center;
 }
 
-.btn-panel {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 200;
-  text-align: center;
-}
 
 .stat-row {
   display: flex;
@@ -111,6 +132,10 @@ h1 {
   transition: width 0.4s ease, background 0.4s ease;
 }
 
+.pop-fill{
+  width: 0%;
+}
+
 .stat-num {
   width: 28px;
   text-align: left;
@@ -118,9 +143,19 @@ h1 {
   flex-shrink: 0;
 }
 
+
 .month-fill {
   background: #3498db !important;
   width: 8%;
+}
+
+.btn-panel {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  text-align: center;
 }
 
 .btn-row {
@@ -133,14 +168,41 @@ h1 {
 
 button {
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 1rem;
   cursor: pointer;
-  border-radius: 6px;
-  border: none;
+  position: relative;
+  z-index: 100;
   background: #1a73e8;
   color: white;
   font-weight: bold;
+  border-radius: 6px;
+  border: none;
   transition: background 0.2s, transform 0.1s;
+}
+
+#rcBtn {
+  display: none; /* Add this so it doesn't take up space */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  pointer-events: none; /* Prevents clicking while invisible */
+}
+
+#rcBtn.show {
+  display: inline-block; /* Add this to make it appear */
+  opacity: 1;
+    pointer-events: auto; /* Re-enables clicking */
+  }
+  
+.stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  margin: 10px auto;
+  width: 90%;
+  border-radius: 8px;
 }
 
 button:hover:not(:disabled) {
@@ -167,61 +229,77 @@ button:disabled {
   font-weight: bold;
 }
 
-#rc, #cpy, #hpt, .flat, .tree {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  z-index: 1;
-}
-
-#rc {
-  width: 500px;
-  bottom: 150px;
-  left: 50px;
-}
-
-#cpy {
-  width: 500px;
-  bottom: 192px;
-  right: 40px;
-}
-
-.flat { position: absolute; }
-.small { width: 500px; }
-.right-small { right: 313px; bottom: 193px; }
-.big { width: 600px; bottom: 179px; }
-.left-big { left: 180px; }
-.right-big { right: 150px; }
-
-.tree { position: absolute; }
-.small-tree  { width: 280px; bottom: 206px; left: 450px; }
-.medium-tree { width: 400px; bottom: 188px; left: 215px; }
-.big-tree    { width: 450px; bottom: 181px; right: 420px; }
-
-#hpt {
-  width: 680px;
-  position: absolute;
-  bottom: 125px;
-  left: 350px;
-}
-
-img { pointer-events: none; }
-
+/* Badges: Using smaller font and dynamic positioning */
 .badge {
   position: absolute;
   background: #ff6b6b;
   color: white;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 0.8rem;
   padding: 3px 8px;
-  border-radius: 12px;
+  border-radius: 50%;
   pointer-events: none;
   z-index: 50;
 }
 
-#badge-rc   { bottom: 148px; left: 270px; }
-#badge-cpy  { bottom: 190px; right: 280px; }
-#badge-hpt  { bottom: 200px; left: 675px; }
-#badge-flat { bottom: 191px; right: 400px; }
-#badge-tree { bottom: 204px; left: 430px; }
+#badge-rc   { bottom: 280px; left: 70px; }
+#badge-cpy  { bottom: 310px; right: 60px; }
+#badge-hpt  { bottom: 250px; left: 530px; }
+#badge-flat { bottom: 310px; right: 330px; }
+#badge-tree { bottom: 320px; left: 460px; }
+
+/* Container for all game assets to keep them relative to the screen */
+.game-container {
+  position: relative;
+  width: 100%;
+  height: 80vh; /* Keeps space for UI at the bottom */
+}
+
+/* Responsive Building Base Classes */
+img {
+  pointer-events: none;
+  position: absolute;
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+#rc { width: 20%; bottom: 0%; left: 5%; } /*research center*/
+#cpy { width: 18%; bottom: 0%; right: 2%; } /*company*/
+#hpt { width: 23%; bottom: 0%; left: 40%; } /*hospital*/
+
+.small { width: 7%;}/*small flat*/
+.big { width: 10%;}/*big flat*/
+
+.right-small { right: 30%;bottom: 0%;}/*small flat position*/
+.left-big { left: 26%; bottom:0%}/*big left flat position*/
+.right-big { right: 20%; bottom:0%} /*big right flat position*/
+
+.tree {
+  position: absolute;
+}
+
+.small-tree { width: 9%; bottom: 0%; left: 35%;}/*small tree*/
+.medium-tree { width: 12%; bottom: 0%; left: 17.75%;}/*medium tree*/
+.big-tree { width: 15%; bottom: 0%; right: 22%;}/*big tree*/
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  h1 { font-size: 1.2rem; }
+
+  /* Make buildings slightly bigger on mobile so they are clickable/visible */
+  #rc, #cpy, #hpt, .flat, .tree {
+    width: 40% !important;
+  }
+
+  /* Stack stats vertically if the screen is very narrow */
+  .stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* Hide some decorative trees/flats on mobile to avoid clutter */
+  .small-tree, .right-big {
+    display: none !important;
+  }
+}
