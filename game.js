@@ -1,36 +1,70 @@
 let happiness = 50;
 let health = 50;
 let economy = 50;
-let green = 50;
+let sustainability = 50;
+let population = 0;
 
 let currentMonth = 1;
 let decisionsLeft = 3;
 let gameOver = false;
+let CenterBuilt = false;
 
-let countCampus = 0;
+let countFlat = 0;
 let countHospital = 0;
-let countTransport = 0;
-let countSustain = 0;
+let countTree = 0;
+let countCompany = 0;
+let countResearchCenter = 0;
+
+function showBuilding(id) {
+  var el = document.getElementById(id);
+  if (el) {
+    el.style.display = "block";
+    el.style.opacity = "0";
+    setTimeout(function() { el.style.opacity = "1"; }, 10);
+  }
+}
+
+function hideAllBuildings() {
+ var ids = ["rc","cpy","hpt","flat1","flat2","flat3","tree1","tree2","tree3"];
+  for (var i = 0; i < ids.length; i++) {
+    var el = document.getElementById(ids[i]);
+    if (el) el.style.display = "none";
+  }
+  var badges = ["badge-rc","badge-cpy","badge-hpt","badge-flat","badge-tree"];
+  for (var i = 0; i < badges.length; i++) {
+    var el = document.getElementById(badges[i]);
+    if (el) { el.style.display = "none"; el.innerText = ""; }
+}
+}
 
 function updateUI() {
   document.getElementById("happy").innerText = happiness;
   document.getElementById("health").innerText = health;
   document.getElementById("eco").innerText = economy;
-  document.getElementById("green").innerText = green;
+  document.getElementById("stn").innerText = sustainability;
   document.getElementById("month").innerText = currentMonth;
   document.getElementById("decisions").innerText = decisionsLeft;
+  document.getElementById("pop").innerText = population;
+
+  document.getElementById("CountFlat").innerText = countFlat;
+  document.getElementById("CountHospital").innerText = countHospital;
+  document.getElementById("CountCompany").innerText = countCompany;
+  document.getElementById("CountTree").innerText = countTree;
+  document.getElementById("CountResearchCenter").innerText = countResearchCenter;
 
   document.getElementById("bar-happy").style.width = happiness + "%";
   document.getElementById("bar-health").style.width = health + "%";
   document.getElementById("bar-eco").style.width = economy + "%";
-  document.getElementById("bar-green").style.width = green + "%";
+  document.getElementById("bar-sus").style.width = sustainability + "%";
   document.getElementById("bar-month").style.width = (currentMonth / 12 * 100) + "%";
+  document.getElementById("bar-pop").style.width = population + "%";
 
   updateBarColor("bar-happy", happiness);
   updateBarColor("bar-health", health);
   updateBarColor("bar-eco", economy);
-  updateBarColor("bar-green", green);
+  updateBarColor("bar-sus", sustainability);
 
+  checkRCConditions();
   checkWinLose();
 }
 
@@ -45,46 +79,15 @@ function updateBarColor(barId, value) {
   }
 }
 
-function showBuilding(id) {
-  var el = document.getElementById(id);
-  if (el) {
-    el.style.display = "block";
-    el.style.opacity = "0";
-    setTimeout(function() { el.style.opacity = "1"; }, 10);
-  }
-}
-
-function showAndCount(imgId, badgeId, count) {
-  showBuilding(imgId);
-  var badge = document.getElementById(badgeId);
-  if (badge && count > 1) {
-    badge.innerText = "x" + count;
-    badge.style.display = "block";
-  }
-}
-
-function hideAllBuildings() {
-  var ids = ["rc","cpy","hpt","flat1","flat2","flat3","tree1","tree2","tree3"];
-  for (var i = 0; i < ids.length; i++) {
-    var el = document.getElementById(ids[i]);
-    if (el) el.style.display = "none";
-  }
-  var badges = ["badge-rc","badge-cpy","badge-hpt","badge-flat","badge-tree"];
-  for (var i = 0; i < badges.length; i++) {
-    var el = document.getElementById(badges[i]);
-    if (el) { el.style.display = "none"; el.innerText = ""; }
-  }
-}
-
 function getTitle() {
-  var max = Math.max(happiness, health, economy, green);
-  var min = Math.min(happiness, health, economy, green);
+  var max = Math.max(happiness, health, economy, sustainability);
+  var min = Math.min(happiness, health, economy, sustainability);
 
   if (max - min <= 15) return "Symphony of Harmony";
   if (happiness == max) return "Symphony of Joy";
   if (health == max)    return "Symphony of Vitality";
   if (economy == max)   return "Symphony of Wealth";
-  if (green == max)     return "Symphony of Eternity";
+  if (sustainability == max)     return "Symphony of Eternity";
 
   return "Symphony of Harmony";
 }
@@ -103,13 +106,13 @@ function showEndScreen(title, msg) {
 function checkWinLose() {
   if (gameOver) return;
 
-  if (happiness <= 0 || health <= 0 || economy <= 0 || green <= 0) {
+  if (happiness <= 0 || health <= 0 || economy <= 0 || sustainability <= 0) {
     gameOver = true;
     var stat = "a stat";
     if (happiness <= 0) stat = "Happiness";
     if (health <= 0)    stat = "Health";
     if (economy <= 0)   stat = "Economy";
-    if (green <= 0)     stat = "Environment";
+    if (sustainability <= 0)     stat = "Environment";
     showEndScreen("💀 City Collapsed!", stat + " hit zero after " + currentMonth + " month(s).");
     return;
   }
@@ -118,25 +121,24 @@ function checkWinLose() {
 function spendDecision() {
   if (gameOver) return false;
   if (decisionsLeft <= 0) return false;
-
   decisionsLeft--;
   document.getElementById("decisions").innerText = decisionsLeft;
-
   if (decisionsLeft === 0) {
-    setTimeout(function() { nextMonth(); }, 800);
+    setTimeout(() => nextMonth(), 800); 
   }
-
   return true;
 }
 
 function nextMonth() {
   if (gameOver) return;
 
-  happiness = Math.max(0, happiness - 2);
+  
+  happiness = Math.max(0, happiness - 3);
   health    = Math.max(0, health    - 2);
   economy   = Math.max(0, economy   - 2);
-  green     = Math.max(0, green     - 2);
+  sustainability     = Math.max(0, sustainability - 3);
 
+  
   if (currentMonth >= 12) {
     gameOver = true;
     var title = getTitle();
@@ -144,25 +146,30 @@ function nextMonth() {
     showEndScreen("🎉 Year Complete!", 'You earned the title: "' + title + '"');
     return;
   }
-
   currentMonth++;
   decisionsLeft = 3;
-  document.getElementById("message").innerText = "📅 Month " + currentMonth + " begins!";
+  if (CenterBuilt){
+    giveCenterBonus();
+  }
+  document.getElementById("message").innerText = `📅 Month ${currentMonth} begins. You have 3 decisions.`;
   updateUI();
 }
 
 function restartGame() {
   happiness = 50;
-  health    = 50;
-  economy   = 50;
-  green     = 50;
-  currentMonth  = 1;
+  health = 50;
+  economy = 50;
+  sustainability = 50;
+  currentMonth = 1;
   decisionsLeft = 3;
-  gameOver      = false;
-  countCampus   = 0;
+  gameOver = false;
+  CenterBuilt = false;
+  countFlat   = 0;
   countHospital = 0;
-  countTransport = 0;
-  countSustain  = 0;
+  countCompany = 0;
+  countTree  = 0;
+  countResearchCenter = 0;
+  population = 0;
 
   hideAllBuildings();
   document.getElementById("endScreen").style.display = "none";
@@ -176,54 +183,103 @@ function restartGame() {
   updateUI();
 }
 
-function buildTransport() {
+function buildFlat() {
   if (!spendDecision()) return;
-  happiness += 8;
-  economy   += 6;
-  health    += 2;
-  green     -= 5;
-  countTransport++;
-  showAndCount("flat1", "badge-flat", countTransport);
-  showAndCount("flat2", "badge-flat", countTransport);
-  showAndCount("flat3", "badge-flat", countTransport);
-  document.getElementById("message").innerText = "🚆 Transport improved!";
+  happiness += 10;
+  economy -= 7;
+  population += 10;
+  countFlat++;
+  showBuilding("flat1", "badge-flat", countFlat);
+  showBuilding("flat2", "badge-flat", countFlat);
+  showBuilding("flat3", "badge-flat", countFlat);
+  document.getElementById("message").innerText = "Flat built!";
   updateUI();
 }
 
 function buildHospital() {
   if (!spendDecision()) return;
-  health    += 12;
-  happiness += 4;
-  economy   -= 4;
-  green     += 2;
+  health += 12;
+  economy -= 5;
+  happiness += 5;
   countHospital++;
-  showAndCount("hpt", "badge-hpt", countHospital);
-  document.getElementById("message").innerText = "🏥 Hospital built!";
+  showBuilding("hpt");
+  document.getElementById("message").innerText = "Hospital built!";
   updateUI();
 }
 
-function buildCampus() {
+function buildTree() {
   if (!spendDecision()) return;
-  happiness += 6;
-  economy   += 8;
-  health    += 2;
-  green     -= 5;
-  countCampus++;
-  showAndCount("rc", "badge-rc", countCampus);
-  document.getElementById("message").innerText = "🎓 Campus opened!";
-  updateUI();
-}
-
-function buildSustainability() {
-  if (!spendDecision()) return;
-  green     += 12;
-  health    += 4;
+  sustainability += 7;
   happiness += 3;
-  economy   -= 5;
-  countSustain++;
-  showAndCount("tree1", "badge-tree", countSustain);
-  showAndCount("tree2", "badge-tree", countSustain);
-  showAndCount("tree3", "badge-tree", countSustain);
-  document.getElementById("message").innerText = "🌳 Trees planted!";
+  economy -= 5;
+  countTree++;
+  showBuilding("tree1");
+  showBuilding("tree2");
+  showBuilding("tree3");
+  document.getElementById("message").innerText = "Sustainability project launched!";
   updateUI();
+}
+
+function buildCompany() {
+  if (!spendDecision()) return;
+  economy += 20;
+  happiness -= 10;
+  health -= 5;
+  countCompany++;
+  showBuilding("cpy");
+  document.getElementById("message").innerText = "New company invested!";
+  updateUI();
+}
+
+function checkRCConditions() {
+  if(CenterBuilt){
+      document.getElementById('rcBtn').classList.remove('show');
+      return;
+  }
+    let peopleExist = parseInt(document.getElementById('pop').innerText);
+    let btn = document.getElementById('rcBtn');
+
+    // Condition: Show button only if population is 20 or higher
+    if (peopleExist >= 20) {
+        document.getElementById('rcBtn').classList.add('show');    
+      } 
+}
+
+function buildResearchCenter() {
+  if (!spendDecision()) return;
+
+  CenterBuilt = true;
+  countResearchCenter += 1;
+  showBuilding("rc");
+  document.getElementById("message").innerText = "Research_center invested! It will give random stat every month!";
+  updateUI();
+}
+
+function giveCenterBonus() {
+
+  let stats = ["happy", "eco", "stn", "health"];
+  let randomStat = stats[Math.floor(Math.random() * stats.length)];
+
+  let messageCenter = "";
+
+  if (randomStat === "happy") {
+    happiness += 10;
+    messageCenter = "Citizens feel happier! +10 Happiness 😊";
+  } 
+  else if (randomStat === "eco") {
+    economy += 10;
+    messageCenter = "Businesses are booming! +10 Economy 📈";
+  } 
+  else if (randomStat === "stn") {
+    sustainability += 10;
+    messageCenter = "City becomes more sustainable! +10 Sustainability 🌱";
+  } 
+  else if (randomStat === "health") {
+    health += 10;
+    messageCenter = "Healthcare improves! +10 Health 🏥";
+  }
+
+  updateUI();
+
+  alert(messageCenter);
 }
